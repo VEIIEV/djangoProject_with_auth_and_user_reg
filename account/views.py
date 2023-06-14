@@ -2,6 +2,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.contrib import messages
 
 from account.forms import LoginFrom, UserRegistrationForm, UserEditForm, ProfileEditForm
 from account.models import Profile
@@ -59,8 +60,8 @@ def register(request):
 
 
 @login_required
-def dashboard(requset):
-    return render(requset,
+def dashboard(request):
+    return render(request,
                   'account/dashboard.html',
                   {'section': 'dashboard'})
 
@@ -76,6 +77,12 @@ def edit(request):
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
+            # contrib.messages исп для добавления инф в контекст,
+            # можно просто передать в рендер, как ещё 1 пункт словаря,
+            # но так круче и универсальнее
+            messages.success(request, 'profile updated successfully')
+        else:
+            messages.error(request, 'Error updating your profile')
     else:
         user_form = UserEditForm(instance=request.user)
         profile_form = ProfileEditForm(

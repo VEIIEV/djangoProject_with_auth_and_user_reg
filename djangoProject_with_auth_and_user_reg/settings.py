@@ -47,6 +47,14 @@ MEDIA_URL = 'media/'
 # расположение файлов
 MEDIA_ROOT = BASE_DIR / 'media'
 
+
+# указываются файлы, которые аутентифицируют пользователей
+AUTHENTICATION_BACKENDS = [
+ 'django.contrib.auth.backends.ModelBackend',
+ 'account.authentication.EmailAuthBackend',
+]
+
+
 # Application definition
 
 INSTALLED_APPS = [
