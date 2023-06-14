@@ -36,6 +36,17 @@ LOGOUT_URL = 'logout'
 # параметр для написания почтовых писем в консоль, полезно для тестов
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+# настроено мной скопировано из django.global_settings
+# использовал этот параметр в модели Profile
+
+# AUTH_USER_MODEL = "auth.User"
+
+# базовый url, исп для раздачи медиафайлов
+MEDIA_URL = 'media/'
+
+# расположение файлов
+MEDIA_ROOT = BASE_DIR / 'media'
+
 # Application definition
 
 INSTALLED_APPS = [

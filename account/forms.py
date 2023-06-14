@@ -1,6 +1,8 @@
 from django import forms
 from django.contrib.auth.models import User
 
+from account.models import Profile
+
 
 class LoginFrom(forms.Form):
     username = forms.CharField()
@@ -17,7 +19,6 @@ class UserRegistrationForm(forms.ModelForm):
         model = User
         fields = ['username', 'first_name', 'email']
 
-
     # Метод clean_<fieladname>() можно предоставлять любому полю
     # формы, чтобы очищать значение или вызывать ошибку валидации формы
     # для конкретного поля.
@@ -26,3 +27,15 @@ class UserRegistrationForm(forms.ModelForm):
         if cd['password'] != cd['password2']:
             raise forms.ValidationError('Password don\'t match')
         return cd['password2']
+
+
+class UserEditForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email']
+
+
+class ProfileEditForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields=['date_of_birth', 'photo']
