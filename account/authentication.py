@@ -19,7 +19,6 @@ class EmailAuthBackend:
         except (User.DoesNotExist, User.MultipleObjectsReturned):
             return None
 
-
     # исп аут пользователя бэкенда, что бы получить объект User
     def get_user(self, user_id):
         try:

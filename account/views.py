@@ -61,9 +61,11 @@ def register(request):
 
 @login_required
 def dashboard(request):
+    profiles = Profile.objects.all()
     return render(request,
                   'account/dashboard.html',
-                  {'section': 'dashboard'})
+                  {'section': 'dashboard',
+                   'profiles': profiles})
 
 
 @login_required

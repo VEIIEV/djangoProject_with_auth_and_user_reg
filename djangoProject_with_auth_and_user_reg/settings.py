@@ -29,9 +29,9 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 # параметры, которые позволяют django вызывать эти url по умолчанию для полей с необходимой аутентификацией
-LOGIN_REDIRECT_URL = 'dashboard'
-LOGIN_URL = 'login'
-LOGOUT_URL = 'logout'
+LOGIN_REDIRECT_URL = 'account:dashboard'
+LOGIN_URL = 'account:login'
+LOGOUT_URL = 'account:logout'
 
 # параметр для написания почтовых писем в консоль, полезно для тестов
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

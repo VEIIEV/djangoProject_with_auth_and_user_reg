@@ -21,9 +21,8 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('account/', include('account.urls'))
+    path('account/', include('account.urls', namespace='account'))
 ]
-
 
 # static() раздает медиафайлы с помощью сервера разработки (сам django)
 # исп только при дебаге, потому что django хуёво раздаёт файлы
