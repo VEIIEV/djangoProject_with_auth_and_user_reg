@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-hbvnk4dw7pdztp1&tk6a&5zl44t%ec5w7a%+50965t+a01pi^a
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['mysite.com', 'localhost']
 
 # параметры, которые позволяют django вызывать эти url по умолчанию для полей с необходимой аутентификацией
 LOGIN_REDIRECT_URL = 'account:dashboard'
@@ -47,13 +47,12 @@ MEDIA_URL = 'media/'
 # расположение файлов
 MEDIA_ROOT = BASE_DIR / 'media'
 
-
 # указываются файлы, которые аутентифицируют пользователей
 AUTHENTICATION_BACKENDS = [
- 'django.contrib.auth.backends.ModelBackend',
- 'account.authentication.EmailAuthBackend',
+    'django.contrib.auth.backends.ModelBackend',
+    'account.authentication.EmailAuthBackend',
+    'social_core.backends.vk.VKOAuth2'
 ]
-
 
 # Application definition
 
@@ -91,6 +90,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',  # Добавил эту строку для vk OAUTH2
             ],
         },
     },
@@ -146,3 +146,7 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+SOCIAL_AUTH_VK_OAUTH2_KEY = '51676840'
+
+SOCIAL_AUTH_VK_OAUTH2_SECRET = 'DXR3I9SkTyZQydvKeFFM'
