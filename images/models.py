@@ -7,6 +7,7 @@ from django.utils.text import slugify
 # Create your models here.
 
 
+# many-to-many  неявно создаёт промежуточную модель
 class Image(models.Model):
     # one-to-many
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
@@ -35,9 +36,31 @@ class Image(models.Model):
         super().save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return  reverse('images:detail', args=[self.id, self.slug])
-
+        return reverse('images:detail', args=[self.id, self.slug])
 
     def __str__(self):
         return self.title
+
+
+# модель которую мы будем явно указывать при связи many-to-many
+# через ключ 'through'
+# будет использоваться в приложение account
+class Contact(models.Model):
+    user_from = models.ForeignKey('auth.User',
+                                  related_name='rel_from_set',
+                                  on_delete=models.CASCADE)
+    user_to = models.ForeignKey('auth.User',
+                                related_name='rel_to_set',
+                                on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['-created'])
+        ]
+        ordering = ['-created']
+
+    def __str__(self):
+        return f'{self.user_from} follows {self.user_to}'
+
 

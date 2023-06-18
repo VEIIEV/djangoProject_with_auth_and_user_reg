@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from django.urls import reverse_lazy
 
 import django.core.mail.backends.console
 
@@ -48,6 +49,12 @@ MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 SECURE_SSL_REDIRECT = True
+
+# настройка для получения абсолютного урла
+ABSOLUTE_URL_OVERRIDES = {
+    'auth.user': lambda u: reverse_lazy('account:user_detail',
+                                        args=[u.username])
+}
 
 # указываются файлы, которые аутентифицируют пользователей
 AUTHENTICATION_BACKENDS = [
@@ -160,5 +167,6 @@ SOCIAL_AUTH_VK_OAUTH2_SECRET = 'DXR3I9SkTyZQydvKeFFM'
 
 if DEBUG:
     import mimetypes
+
     mimetypes.add_type('application/javascript', '.js', True)
     mimetypes.add_type('text/css', '.css', True)

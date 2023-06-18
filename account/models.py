@@ -3,6 +3,9 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.contrib.auth import get_user_model
+
+from images.models import Contact
 
 
 # Create your models here.
@@ -28,3 +31,13 @@ class Profile(models.Model):
     @receiver(post_save, sender=User)
     def save_user_profile(sender, instance, **kwargs):
         instance.profile.save()
+
+
+# получаем модель auth.user
+user_model = get_user_model()
+# добавляем в неё свойство following
+user_model.add_to_class('following',
+                        models.ManyToManyField('self',
+                                               through=Contact,
+                                               related_name='followers',
+                                               symmetrical=False))
