@@ -36,3 +36,4 @@ class ImageCreateForm(forms.ModelForm):
             # сохраняем модель в бд
             image.save()
         return image
+

@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-hbvnk4dw7pdztp1&tk6a&5zl44t%ec5w7a%+50965t+a01pi^a
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['mysite.com', 'localhost']
+ALLOWED_HOSTS = ['mysite.com', 'localhost', '127.0.0.1']
 
 # параметры, которые позволяют django вызывать эти url по умолчанию для полей с необходимой аутентификацией
 LOGIN_REDIRECT_URL = 'account:dashboard'
@@ -47,6 +47,8 @@ MEDIA_URL = 'media/'
 # расположение файлов
 MEDIA_ROOT = BASE_DIR / 'media'
 
+SECURE_SSL_REDIRECT = True
+
 # указываются файлы, которые аутентифицируют пользователей
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
@@ -64,7 +66,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'images.apps.ImagesConfig'
+    'django_extensions',
+    'images.apps.ImagesConfig',
+    'sslserver',  # нужно для запуска тестового https
+    'easy_thumbnails',  # нужна для генерации миниатюрных изображений
+
 ]
 
 MIDDLEWARE = [
@@ -151,3 +157,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SOCIAL_AUTH_VK_OAUTH2_KEY = '51676840'
 
 SOCIAL_AUTH_VK_OAUTH2_SECRET = 'DXR3I9SkTyZQydvKeFFM'
+
+if DEBUG:
+    import mimetypes
+    mimetypes.add_type('application/javascript', '.js', True)
+    mimetypes.add_type('text/css', '.css', True)
