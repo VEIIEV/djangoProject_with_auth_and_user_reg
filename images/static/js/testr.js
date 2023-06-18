@@ -1,59 +1,32 @@
-const url = '{% url "images:like" %}';
+const url = '{% url "user_follow" %}';
 var options = {
     method: 'POST',
     headers: {'X-CSRFToken': csrftoken},
     mode: 'same-origin'
 }
-document.querySelector('a.like')
+document.querySelector('a.follow')
     .addEventListener('click', function (e) {
         e.preventDefault();
-        var likeButton = this;
-
+        var followButton = this;
         // добавить тело запроса
         var formData = new FormData();
-        formData.append('id', likeButton.dataset.id);
-        formData.append('action', likeButton.dataset.action);
+        formData.append('id', followButton.dataset.id);
+        formData.append('action', followButton.dataset.action);
         options['body'] = formData;
         // отправить HTTP-запрос
         fetch(url, options)
             .then(response => response.json())
             .then(data => {
                 if (data['status'] === 'ok') {
-                    var previousAction = likeButton.dataset.action;
-                    // переключить текст кнопки и атрибут data-action
-                    var action = previousAction === 'like' ? 'unlike' : 'like';
-                    likeButton.dataset.action = action;
-                    likeButton.innerHTML = action;
-                    // обновить количество лайков
-                    var likeCount = document.querySelector('span.count .total');
-                    var totalLikes = parseInt(likeCount.innerHTML);
-                    likeCount.innerHTML = previousAction === 'like' ? totalLikes + 1 : totalLikes - 1;
+                    var previousAction = followButton.dataset.action;
+                    // переключить текст кнопки и data-action
+                    var action = previousAction === 'follow' ? 'unfollow' : 'follow';
+                    followButton.dataset.action = action;
+                    followButton.innerHTML = action;
+                    // обновить количество подписчиков
+                    var followerCount = document.querySelector('span.count .total');
+                    var totalFollowers = parseInt(followerCount.innerHTML);
+                    followerCount.innerHTML = previousAction === 'follow' ? totalFollowers + 1 : totalFollowers - 1;
                 }
             })
     });
-
-
-var page = 1;
-var emptyPage = false;
-var blockRequest = false;
-window.addEventListener('scroll', function (e) {
-    var margin = document.body.clientHeight – window.innerHeight – 200;
-    if (window.pageYOffset > margin && !emptyPage && !blockRequest) {
-        blockRequest = true;
-        page += 1;
-        fetch('?images_only=1&page=' + page)
-            .then(response => response.text())
-            .then(html => {
-                if (html === '') {
-                    emptyPage = true;
-                } else {
-                    var imageList = document.getElementById('image-list');
-                    imageList.insertAdjacentHTML('beforeEnd', html);
-                    blockRequest = false;
-                }
-            })
-    }
-});
-// Запустить события прокрутки
-const scrollEvent = new Event('scroll');
-window.dispatchEvent(scrollEvent);

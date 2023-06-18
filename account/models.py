@@ -35,6 +35,8 @@ class Profile(models.Model):
 
 # получаем модель auth.user
 user_model = get_user_model()
+# мне кажется можно использовать и просто User.add_to...
+
 # добавляем в неё свойство following
 user_model.add_to_class('following',
                         models.ManyToManyField('self',
