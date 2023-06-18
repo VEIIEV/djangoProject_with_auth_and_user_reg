@@ -75,6 +75,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
     'images.apps.ImagesConfig',
+    'actions.apps.ActionsConfig',
     'sslserver',  # нужно для запуска тестового https
     'easy_thumbnails',  # нужна для генерации миниатюрных изображений
 
