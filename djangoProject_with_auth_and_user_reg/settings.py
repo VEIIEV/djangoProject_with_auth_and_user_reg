@@ -78,10 +78,12 @@ INSTALLED_APPS = [
     'django_extensions',
     'sslserver',  # нужно для запуска тестового https
     'easy_thumbnails',  # нужна для генерации миниатюрных изображений
+    'debug_toolbar',
 
 ]
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -122,6 +124,14 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+
+# Подключаем Redis
+
+REDIS_HOST = 'localhost'
+REDIS_PORT = 6379
+REDIS_DB = 0
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -166,8 +176,15 @@ SOCIAL_AUTH_VK_OAUTH2_KEY = '51676840'
 
 SOCIAL_AUTH_VK_OAUTH2_SECRET = 'DXR3I9SkTyZQydvKeFFM'
 
+
+# дле дебага
 if DEBUG:
     import mimetypes
 
     mimetypes.add_type('application/javascript', '.js', True)
     mimetypes.add_type('text/css', '.css', True)
+
+
+INTERNAL_IPS = [
+ '127.0.0.1',
+]

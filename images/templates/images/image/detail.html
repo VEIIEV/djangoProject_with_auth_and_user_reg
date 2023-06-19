@@ -11,9 +11,14 @@
             <div>
                 <span class="count">
                     <span class="total"> {{ total_likes }}</span>
+
         {# pluralize подбираем окончание слова в зависимости от количества     #}
-                    {{ total_likes }} like{{ total_likes|pluralize }}
+                        like{{ total_likes|pluralize }}
                 </span>
+                <span class="count">
+                    {{ total_views }} view{{ total_views|pluralize }}
+                </span>
+
                 <a href="#" data-id="{{ image.id }}" data-action="{% if request.user in users_like %}un{% endif %}like"
                    class="like button">
                     {% if request.user not in users_like %}
@@ -45,37 +50,37 @@
 
 {% block domready %}
     const url = '{% url "images:like" %}';
-var options = {
+    var options = {
     method: 'POST',
     headers: {'X-CSRFToken': csrftoken},
     mode: 'same-origin'
-}
-document.querySelector('a.like')
+    }
+    document.querySelector('a.like')
     .addEventListener('click', function (e) {
-        e.preventDefault();
-        var likeButton = this;
+    e.preventDefault();
+    var likeButton = this;
 
-        // добавить тело запроса
-        var formData = new FormData();
-        formData.append('id', likeButton.dataset.id);
-        formData.append('action', likeButton.dataset.action);
-        options['body'] = formData;
-        // отправить HTTP-запрос
-        fetch(url, options)
-            .then(response => response.json())
-            .then(data => {
-                if (data['status'] === 'ok') {
-                    var previousAction = likeButton.dataset.action;
-                    // переключить текст кнопки и атрибут data-action
-                    var action = previousAction === 'like' ? 'unlike' : 'like';
-                    likeButton.dataset.action = action;
-                    likeButton.innerHTML = action;
-                    // обновить количество лайков
-                    var likeCount = document.querySelector('span.count .total');
-                    var totalLikes = parseInt(likeCount.innerHTML);
-                    likeCount.innerHTML = previousAction === 'like' ? totalLikes + 1 : totalLikes - 1;
-                }
-            })
+    // добавить тело запроса
+    var formData = new FormData();
+    formData.append('id', likeButton.dataset.id);
+    formData.append('action', likeButton.dataset.action);
+    options['body'] = formData;
+    // отправить HTTP-запрос
+    fetch(url, options)
+    .then(response => response.json())
+    .then(data => {
+    if (data['status'] === 'ok') {
+    var previousAction = likeButton.dataset.action;
+    // переключить текст кнопки и атрибут data-action
+    var action = previousAction === 'like' ? 'unlike' : 'like';
+    likeButton.dataset.action = action;
+    likeButton.innerHTML = action;
+    // обновить количество лайков
+    var likeCount = document.querySelector('span.count .total');
+    var totalLikes = parseInt(likeCount.innerHTML);
+    likeCount.innerHTML = previousAction === 'like' ? totalLikes + 1 : totalLikes - 1;
+    }
+    })
     });
 
 {% endblock %}
