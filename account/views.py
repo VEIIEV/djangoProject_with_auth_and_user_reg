@@ -8,6 +8,8 @@ from django.views.decorators.http import require_POST
 
 from account.forms import LoginFrom, UserRegistrationForm, UserEditForm, ProfileEditForm
 from account.models import Profile
+from actions.models import Action
+from actions.utils import create_action
 from images.models import Contact
 
 
@@ -51,7 +53,7 @@ def register(request):
             # Сохранить объект User
             new_user.save()
             Profile.objects.create(user=new_user)
-
+            create_action(request.user, 'has created an account')
             return render(request,
                           'account/register_done.html',
                           {'new_user': new_user})
@@ -64,11 +66,23 @@ def register(request):
 
 @login_required
 def dashboard(request):
+    actions = Action.objects.exclude(user=request.user)
+    # всё норм, мы добавляем поле following динамически в account.models
+    # values_list возвращается список кортежей с данными, flat=True преобразует кортежи в единичные значения
+    following_ids = request.user.following.values_list('id', flat=True)
+    if following_ids:
+        # user_id in (following_ids)
+        actions = actions.filter(user_id__in=following_ids)
+    # методы оптимизации
+    # select_related() join'ит все foreignkey или только указанные
+    # prefetch_related()
+    actions = actions.select_related('user', 'user__profile').prefetch_related('target').order_by('-created')[:10]
     profiles = Profile.objects.all()
     return render(request,
                   'account/dashboard.html',
                   {'section': 'dashboard',
-                   'profiles': profiles})
+                   'profiles': profiles,
+                   'actions': actions})
 
 
 @login_required
@@ -130,6 +144,7 @@ def user_follow(request):
                 Contact.objects.get_or_create(
                     user_from=request.user,
                     user_to=user)
+                create_action(request.user, 'is following', user)
             else:
                 Contact.objects.filter(user_from=request.user,
                                        user_to=user).delete()

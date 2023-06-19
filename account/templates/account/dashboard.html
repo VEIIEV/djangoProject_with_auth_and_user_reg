@@ -17,9 +17,16 @@
         You can <a href="{% url 'account:edit' %}">edit your profile</a>
         or <a href="{% url 'account:password_change' %}">change your password</a>.
     </p>
-{#    {% for profile in profiles %}#}
-{#        {% if profile.photo %}#}
-{#            <img src="{{ profile.photo.url }}"/>#}
-{#        {% endif %}#}
-{#    {% endfor %}#}
+    {#    {% for profile in profiles %}#}
+    {#        {% if profile.photo %}#}
+    {#            <img src="{{ profile.photo.url }}"/>#}
+    {#        {% endif %}#}
+    {#    {% endfor %}#}
+
+    <h2>What's happening</h2>
+    <div id="action-list">
+        {% for action in actions %}
+            {% include "actions/action/detail.html" %}
+        {% endfor %}
+    </div>
 {% endblock %}
